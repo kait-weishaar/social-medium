@@ -1,23 +1,22 @@
-//import thought and user, but not reaction?
-const {Thought, User} = require("../models");
+const router = require("express").Router();
 
-const userController = {
-    //route to get all
-    getAllUsers(req, res) {
-        User.find({})
-        .populate({
-            path: "reactions",
-            select: "-__v"
-        })
-        .populated({
-            path: "thoughts",
-            select: "-__v",
-        })
-        .select(-__v)
-        .then((dbUserData) => res.json(dbUserData))
-        .catch((err) => {
-            console.log(err);
-            res.status(400),json(err);
-        });
-    },
-}
+const {
+  getAllUsers,
+  getUserbyId,
+  createUser,
+  updateUser,
+  deleteUser,
+  newFriend,
+  deleteFriend,
+} = require("../../controllers/user-controller");
+
+// /api/users
+router.route("/").get(getAllUsers).post(createUser);
+
+// /api/users/:id
+router.route("/:id").get(getUserbyId).put(uodateUser).delete(deleteUser);
+
+// /api/users/:id/friends/:friendsId
+router.route("/:id/friends/:friendsId").post(newFriend). delete(deleteFriend);
+
+module.exports = router;
