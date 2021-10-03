@@ -11,11 +11,11 @@ const thoughtController = {
             path: "reactions",
             select: "-__v"
         })
-        .populated({
+        .populate({
             path: "thoughts",
             select: "-__v",
         })
-        .select(-__v)
+        .select("-__v")
         .then((dbThoughtData) => res.json(dbThoughtData))
         .catch((err) => {
             console.log(err);
@@ -34,7 +34,7 @@ const thoughtController = {
         })
         .catch((err) => {
             console.log(err);
-            res.status(400),json(err);
+            res.status(400).json(err);
         });
     },
     createThought({ body }, res) {
@@ -48,7 +48,7 @@ const thoughtController = {
         })
         .then((newThoughtData) => {
             if (!newThoughtData) {
-                res.status(404).json({message: "No thought found with specified ID"});
+                res.status(404).json({message: "No user found with specified ID"});
                 return;
             }
             res.json(newThoughtData);
@@ -81,7 +81,7 @@ const thoughtController = {
     newReaction({params, body}, res) {
         Thought.findOneAndUpdate(
             {_id: params.thoughtId},
-            {$pull: {reactions: { reactionId: params.reactionId }}},
+            {$push: {reactions: { reactionId: params.reactionId }}},
             {new: true}
         )
 
